@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: telegram-webhook-bot
+    env: python
+    plan: free
+    buildCommand: ""
+    startCommand: python bot.py
+    envVars:
+      - key: BOT_TOKEN
+        value: YOUR_BOT_TOKEN_HERE
+      - key: WEBHOOK_SECRET
+        value: your_webhook_secret
+      - key: BOT_USERNAME
+        value: your_bot_username_here
