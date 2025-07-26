@@ -45,6 +45,7 @@ def index():
 # Run app and set webhook
 if __name__ == "__main__":
     PORT = int(os.environ.get("PORT", 5000))
+    SECRET = os.environ.get("WEBHOOK_SECRET", "mysecret")
     WEBHOOK_URL = f"https://telegram-webhoo-bot.onrender.com/{SECRET}"
 
     # Set webhook before starting the server
