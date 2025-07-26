@@ -15,13 +15,6 @@ if not TOKEN:
 bot = telegram.Bot(token=TOKEN)
 app = Flask(__name__)
 
-# Optional: Automatically set webhook on first request
-@app.before_first_request
-def setup_webhook():
-    webhook_url = f"https://telegram-webhoo-bot.onrender.com/{SECRET}"
-    bot.set_webhook(url=webhook_url)
-    print(f"✅ Webhook set to: {webhook_url}")
-
 # Handle favicon.ico to prevent 404
 @app.route('/favicon.ico')
 def favicon():
@@ -49,7 +42,17 @@ def webhook():
 def index():
     return "🌐 Bot is live!"
 
-# Run app
+# Run app and set webhook
 if __name__ == "__main__":
     PORT = int(os.environ.get("PORT", 5000))
+    WEBHOOK_URL = f"https://telegram-webhoo-bot.onrender.com/{SECRET}"
+
+    # Set webhook before starting the server
+    try:
+        bot.set_webhook(url=WEBHOOK_URL)
+        print(f"✅ Webhook set to: {WEBHOOK_URL}")
+    except Exception as e:
+        print(f"❌ Failed to set webhook: {e}")
+
+    # Start Flask app
     app.run(host="0.0.0.0", port=PORT)
