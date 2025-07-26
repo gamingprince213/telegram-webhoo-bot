@@ -4,7 +4,7 @@ import os
 
 TOKEN = os.environ.get("BOT_TOKEN")
 SECRET = os.environ.get("WEBHOOK_SECRET", "mysecret")
-BOT_USERNAME = os.environ.get("BOT_USERNAME", "mybot")
+BOT_USERNAME = os.environ.get("BOT_USERNAME", "your_bot_username")
 
 bot = telegram.Bot(token=TOKEN)
 app = Flask(__name__)
@@ -12,20 +12,20 @@ app = Flask(__name__)
 @app.route(f"/{SECRET}", methods=["POST"])
 def webhook():
     update = telegram.Update.de_json(request.get_json(force=True), bot)
-    message_text = update.message.text
+    chat_id = update.message.chat_id
+    text = update.message.text
 
-    chat_id = update.message.chat.id
-
-    if message_text == "/start":
-        bot.send_message(chat_id=chat_id, text="🔥 Bot চালু আছে, Welcome!")
+    if text == "/start":
+        bot.send_message(chat_id=chat_id, text="👋 হ্যালো, আমি Render থেকে চলা বট!")
     else:
-        bot.send_message(chat_id=chat_id, text=f"তুমি লিখেছো: {message_text}")
+        bot.send_message(chat_id=chat_id, text=f"আপনি লিখেছেন: {text}")
 
     return "ok"
 
-@app.route("/", methods=["GET"])
+@app.route("/")
 def index():
-    return "🌐 Telegram Bot is running via Webhook!"
+    return "🌐 Bot is live!"
 
 if __name__ == "__main__":
-    app.run()
+    PORT = int(os.environ.get("PORT", 5000))  # Render sets $PORT
+    app.run(host="0.0.0.0", port=PORT)
